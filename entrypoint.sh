@@ -3,6 +3,11 @@
 # Only allocate a broker id and configure the system the first time this container starts.
 # A Kubernetes volume mount will preserve the config if the container dies and is restarted
 # in the same node.
+
+if [[ -n "${COORDINATION_PATH}" ]]; then
+	while [[ ! -e "${COORDINATION_PATH}" ]] do sleep 1; done
+fi
+
 if [ ! -f /etc/kafka/server.properties ]; then
 	# Create a ZK connection string for the servers and the root.
 	ZOOKEEPER_CONNECT=()
