@@ -5,7 +5,7 @@
 # in the same node.
 
 if [[ -n "${COORDINATION_PATH}" ]]; then
-	while [[ ! -e "${COORDINATION_PATH}" ]] do sleep 1; done
+	while [[ ! -e "${COORDINATION_PATH}" ]]; do; sleep 1; done
 fi
 
 if [ ! -f /etc/kafka/server.properties ]; then
