@@ -3,7 +3,7 @@ FROM nordstrom/java:8
 ENV KAFKA_VERSION=0.9.0.0 \
     SCALA_VERSION=2.11.7
 
-COPY confluent_platform_2_0.key /tmp
+COPY confluent_platform_2_0.key /tmp/
 RUN echo "deb http://packages.confluent.io/deb/2.0 stable main" > /etc/apt/sources.list.d/confluent.list \
  && apt-key add /tmp/confluent_platform_2_0.key
 RUN mkdir -p /kafka/config /kafka/data /kafka/logs /kafka/templates \
