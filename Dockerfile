@@ -21,7 +21,7 @@ ENV JMX_PORT=7203 \
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 
-CMD [ "kafka-server-start", "/etc/kafka/server.properties" ]
+CMD [ "kafka-server-start", "/kafka/config/server.properties" ]
 
 # Kafka, JMX
 EXPOSE 9092 7203

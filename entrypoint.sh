@@ -8,7 +8,7 @@ if [[ -n "${COORDINATION_PATH}" ]]; then
 	while [[ ! -e "${COORDINATION_PATH}" ]]; do; sleep 1; done
 fi
 
-if [ ! -f /etc/kafka/server.properties ]; then
+if [ ! -f /kafka/config/server.properties ]; then
 	# Create a ZK connection string for the servers and the root.
 	ZOOKEEPER_CONNECT=()
 	IFS=\, read -a servers <<< "${ZOOKEEPER_SERVERS:=zookeeper:2181}"
@@ -29,6 +29,7 @@ if [ ! -f /etc/kafka/server.properties ]; then
 
 		# Allocate an id by writing to a node and retrieving its version number.
 		BROKER_ID=`echo set /kafka_id_alloc 0 | zookeeper-shell $ZOOKEEPER_CONNECT 2>&1 | grep dataVersion | cut -d' ' -f 3`
+
 		echo "Allocated broker id ${BROKER_ID}."
 	else
 		echo "Using broker id ${BROKER_ID}."
@@ -37,7 +38,7 @@ if [ ! -f /etc/kafka/server.properties ]; then
 	# Create the config file.
 	sed -e "s|\${BROKER_ID}|$BROKER_ID|g" \
 		-e "s|\${ADVERTISED_HOST_NAME}|$ADVERTISED_HOST_NAME|g " \
-		-e "s|\${ZOOKEEPER_CONNECT}|$ZOOKEEPER_CONNECT|g" /kafka/templates/server.properties.template > /etc/kafka/server.properties
+		-e "s|\${ZOOKEEPER_CONNECT}|$ZOOKEEPER_CONNECT|g" /kafka/templates/server.properties.template > /kakfa/config/server.properties
 
 	cp /kafka/templates/log4j.properties /kafka/templates/tools-log4j.properties /etc/kafka
 fi
