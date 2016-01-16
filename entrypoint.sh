@@ -5,10 +5,10 @@
 # in the same node.
 
 if [[ -n "${COORDINATION_PATH}" ]]; then
-	while [[ ! -e "${COORDINATION_PATH}" ]]; do sleep 1; done
+	while [[ ! -f "${COORDINATION_PATH}" ]]; do sleep 1; done
 fi
 
-if [ ! -f /kafka/config/server.properties ]; then
+if [[ ! -f /kafka/config/server.properties ]]; then
 	# Create a ZK connection string for the servers and the root.
 	ZOOKEEPER_CONNECT=()
 	IFS=\, read -a servers <<< "${ZOOKEEPER_SERVERS:=zookeeper:2181}"
@@ -38,7 +38,8 @@ if [ ! -f /kafka/config/server.properties ]; then
 	# Create the config file.
 	sed -e "s|\${BROKER_ID}|$BROKER_ID|g" \
 		-e "s|\${ADVERTISED_HOST_NAME}|$ADVERTISED_HOST_NAME|g " \
-		-e "s|\${ZOOKEEPER_CONNECT}|$ZOOKEEPER_CONNECT|g" /kafka/templates/server.properties.template > /kakfa/config/server.properties
+		-e "s|\${ZOOKEEPER_CONNECT}|$ZOOKEEPER_CONNECT|g" \
+		/kafka/templates/server.properties.template > /kafka/config/server.properties
 
 	cp /kafka/templates/log4j.properties /kafka/templates/tools-log4j.properties /etc/kafka
 fi

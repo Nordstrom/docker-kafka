@@ -6,12 +6,13 @@ ENV KAFKA_VERSION=0.9.0.0 \
 COPY confluent_platform_2_0.key /tmp/
 RUN echo "deb http://packages.confluent.io/deb/2.0 stable main" > /etc/apt/sources.list.d/confluent.list \
  && apt-key add /tmp/confluent_platform_2_0.key
-RUN mkdir -p /kafka/config /kafka/data /kafka/logs /kafka/templates \
- && apt-get update -qy \
+
+RUN apt-get update -qy \
  && apt-get install -qy confluent-kafka-${SCALA_VERSION}=${KAFKA_VERSION}-1 \
  && rm /etc/kafka/server.properties /etc/kafka/log4j.properties /etc/kafka/tools-log4j.properties
 
-ADD  config /kafka/templates/
+RUN mkdir -p /kafka/config/ /kafka/data/ /kafka/logs/ /kafka/templates/
+ADD config /kafka/templates/
 COPY entrypoint.sh /
 
 ENV JMX_PORT=7203 \
