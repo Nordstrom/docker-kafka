@@ -41,8 +41,9 @@ if [[ ! -f /kafka/config/server.properties ]]; then
 		-e "s|\${ZOOKEEPER_CONNECT}|$ZOOKEEPER_CONNECT|g" \
 		/kafka/templates/server.properties.template > /kafka/config/server.properties
 
-	cp /kafka/templates/log4j.properties /kafka/templates/tools-log4j.properties /etc/kafka
 fi
+
+cp /kafka/templates/log4j.properties /kafka/templates/tools-log4j.properties /etc/kafka
 
 cd /kafka
 exec "$@"
