@@ -8,6 +8,10 @@ if [[ -n "${COORDINATION_PATH}" ]]; then
 	while [[ ! -f "${COORDINATION_PATH}" ]]; do sleep 1; done
 fi
 
+mkdir -p /kafka/config || echo "/kafka/config already exists"
+mkdir -p /kafka/data || echo "/kafka/data already exists"
+mkdir -p /kafka/logs || echo "/kafka/logs already exists"
+
 if [[ ! -f /kafka/config/server.properties ]]; then
 	# Create a ZK connection string for the servers and the root.
 	ZOOKEEPER_CONNECT=()
@@ -39,11 +43,11 @@ if [[ ! -f /kafka/config/server.properties ]]; then
 	sed -e "s|\${BROKER_ID}|$BROKER_ID|g" \
 		-e "s|\${ADVERTISED_HOST_NAME}|$ADVERTISED_HOST_NAME|g " \
 		-e "s|\${ZOOKEEPER_CONNECT}|$ZOOKEEPER_CONNECT|g" \
-		/kafka/templates/server.properties.template > /kafka/config/server.properties
+		/templates/server.properties.template > /kafka/config/server.properties
 
 fi
 
-cp /kafka/templates/log4j.properties /kafka/templates/tools-log4j.properties /etc/kafka
+cp /templates/log4j.properties /templates/tools-log4j.properties /etc/kafka
 
 cd /kafka
 exec "$@"

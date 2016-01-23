@@ -11,8 +11,8 @@ RUN apt-get update -qy \
  && apt-get install -qy confluent-kafka-${SCALA_VERSION}=${KAFKA_VERSION}-1 \
  && rm /etc/kafka/server.properties /etc/kafka/log4j.properties /etc/kafka/tools-log4j.properties
 
-RUN mkdir -p /kafka/config/ /kafka/data/ /kafka/logs/ /kafka/templates/
-ADD config /kafka/templates/
+RUN mkdir -p /kafka/config/ /kafka/data/ /kafka/logs/ /templates/
+ADD config /templates/
 COPY entrypoint.sh /
 
 ENV JMX_PORT=7203 \
