@@ -8,11 +8,14 @@ if [[ -n "${COORDINATION_PATH}" ]]; then
 	while [[ ! -f "${COORDINATION_PATH}" ]]; do sleep 1; done
 fi
 
+echo "Route 53 handoff successful."
+
 mkdir -p /kafka/config || echo "/kafka/config already exists"
 mkdir -p /kafka/data || echo "/kafka/data already exists"
 mkdir -p /kafka/logs || echo "/kafka/logs already exists"
 
 if [[ ! -f /kafka/config/server.properties ]]; then
+	echo "No properties found, creating."
 	# Create a ZK connection string for the servers and the root.
 	ZOOKEEPER_CONNECT=()
 	IFS=\, read -a servers <<< "${ZOOKEEPER_SERVERS:=zookeeper:2181}"
@@ -27,6 +30,7 @@ if [[ ! -f /kafka/config/server.properties ]]; then
 	echo create "$ZOOKEEPER_ROOT" 0 | zookeeper-shell $ZOOKEEPER_SERVERS &> /dev/null
 
 	if [ -z $BROKER_ID ]; then
+		echo "Create broker id"
 		# Create node to use for id allocation.
 		# TODO: echo create $ZOOKEEPER_ROOT/id_alloc 0 | /usr/bin/zookeeper-shell $ZOOKEEPER_CONNECT &> /dev/null
 		echo create /kafka_id_alloc 0 | zookeeper-shell $ZOOKEEPER_CONNECT &> /dev/null
@@ -47,7 +51,7 @@ if [[ ! -f /kafka/config/server.properties ]]; then
 
 fi
 
-cp /templates/log4j.properties /templates/tools-log4j.properties /etc/kafka
+cp /templates/log4j.properties /templates/tools-log4j.properties /kafka/config
 
 cd /kafka
 exec "$@"
