@@ -1,6 +1,6 @@
 container_name := kafka
 container_registry := nordstrom
-container_release := 0.9.0.0
+container_release := ephemeral
 
 .PHONY: build tag
 
