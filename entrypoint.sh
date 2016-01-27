@@ -47,6 +47,10 @@ if [[ ! -f /kafka/config/server.properties ]]; then
 
 fi
 
+if [ $BROKER_ID -gt 1000 ]; then
+    echo "Broker ID Exceeds max allowed Broker ID, Kafka will not start."
+fi
+
 cp /templates/log4j.properties /templates/tools-log4j.properties /etc/kafka
 
 cd /kafka
